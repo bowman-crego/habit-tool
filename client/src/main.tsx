@@ -1,21 +1,25 @@
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import App from './App.js'
+import WelcomePage from './pages/WelcomePage.js'
+import CreateProfile from './pages/CreateProfile.js'
+import SetWeeklyGoals from './pages/SetWeeklyGoals.js'
+
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <NotFound />,
     children: [
       {
         index: true,
-        element: <Home />
+        element: <WelcomePage />
       }, {
         path: '/matchup',
-        element: <Matchup />
+        element: <CreateProfile/>
       }, {
-        path: '/matchup/:id',
-        element: <Vote />
+        path: '/goals' ,
+        element: <SetWeeklyGoals/>
       },
     ],
   },
