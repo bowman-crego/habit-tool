@@ -4,6 +4,7 @@ import App from './App.js'
 import WelcomePage from './pages/WelcomePage.js'
 import CreateProfile from './pages/CreateProfile.js'
 import SetWeeklyGoals from './pages/SetWeeklyGoals.js'
+import './index.css'
 
 
 const router = createBrowserRouter([
