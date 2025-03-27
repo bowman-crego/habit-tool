@@ -13,7 +13,7 @@ return (
             <div className="">Habit</div>
         </div>
         <div>
-            <button onClick={() => navigate("/create-profile")}className="bg-teal-500 hover:bg-teal-300 rounded-xl font-bold text-black mt-8 py-4 px-8">Let's Get Started</button>
+            <button onClick={() => navigate("/create-profile")}className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8">Let's Get Started</button>
         </div>
     </div>
 )
