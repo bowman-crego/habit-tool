@@ -4,6 +4,7 @@ import App from './App.js'
 import WelcomePage from './pages/WelcomePage.js'
 import CreateProfile from './pages/CreateProfile.js'
 import SetWeeklyGoals from './pages/SetWeeklyGoals.js'
+import Home from './pages/Home.js'
 import './index.css'
 
 
@@ -16,8 +17,12 @@ const router = createBrowserRouter([
         index: true,
         element: <WelcomePage />
       }, {
-        path: '/matchup',
+        path: '/create-profile',
         element: <CreateProfile/>
+      }, {
+        path: '/home',
+        element: <Home/>
+
       }, {
         path: '/goals' ,
         element: <SetWeeklyGoals/>
