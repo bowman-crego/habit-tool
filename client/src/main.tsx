@@ -4,7 +4,7 @@ import App from './App.js'
 import WelcomePage from './pages/WelcomePage.js'
 import CreateProfile from './pages/CreateProfile.js'
 import SetWeeklyGoals from './pages/SetWeeklyGoals.js'
-import Home from './pages/Home.js'
+import User from './pages/User.js'
 import './index.css'
 
 
@@ -20,8 +20,8 @@ const router = createBrowserRouter([
         path: '/create-profile',
         element: <CreateProfile/>
       }, {
-        path: '/home',
-        element: <Home/>
+        path: '/user',
+        element: <User/>
 
       }, {
         path: '/goals' ,
