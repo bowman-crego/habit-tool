@@ -1,4 +1,4 @@
-import CreateProfile from "./CreateProfile";
+// import CreateProfile from "./CreateProfile";
 import { useNavigate } from "react-router-dom";
 const WelcomePage = () => {
 
