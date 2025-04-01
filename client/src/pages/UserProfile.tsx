@@ -1,6 +1,6 @@
 // import { useNavigate } from "react-router-dom";
 
-const User = () => {
+const UserProfile = () => {
 
 
 
@@ -10,4 +10,4 @@ return(
 
 };
 
-export default User;
+export default UserProfile;
