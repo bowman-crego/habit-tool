@@ -57,13 +57,13 @@ return (
                     className="mb-4 p-2 rounded"
                 />
             </div>
-        </form>
             <button
                 type="submit"
                 className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8"
             >
                 Create Profile
             </button>
+        </form>
     </div>
 );
 

@@ -1,29 +1,61 @@
- import React from 'react';
- import { useState } from 'react';
+ 
+ import { useState, FormEvent, ChangeEvent} from 'react';
+ import Auth from '../utils/auth.js';
+ import { useMutation } from '@apollo/client';
+ import { LOGIN_USER } from '../utils/mutations.js';
 
  const LoginPage = () => {
 
-    const [username, setUsername] =  useState('');
-    const [email, setEmail] =  useState('');
-    const [password, setPassword] =  useState('');
+    const [formState, setFormState] = useState({
+        username: '',
+        email: '',
+        password: ''
+    });
+    const [login, { error, data }] = useMutation(LOGIN_USER);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.target;
+        setFormState({
+            ...formState,
+            [name]: value,
+        });
+    };
+
+    const handleFormSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("submitting form");
+        console.log(formState);
+        try {
+            const { data } = await login({
+                variables: { ...formState }
+            });
 
+        
+        Auth.login(data.login.token);
+        } catch (e) {
+            console.error(e);
+        }
+
+        setFormState({
+            username: '',
+            email: '',
+            password: ''
+        }); 
     };
 
     return (
         <div className="text-white bg-black h-screen flex flex-col justify-center items-center text-primary">
         <div className="text-white text-center text-6xl font-bold">Login</div>
-        <form onSubmit={handleSubmit} className="flex flex-col items-left mt-8">
+        {data ? (
+            <p className="text-green-500">Success! You may now head to your profile.</p>
+        ) : (
+        <form onSubmit={handleFormSubmit} className="flex flex-col items-left mt-8">
             <div>
                 <label className="px-4">Username:</label>
                 <input
                     type="text"
                     placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={formState.username}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 /> 
             </div>
@@ -32,8 +64,8 @@
                 <input
                     type="email"
                     placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={formState.email}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 />
             </div>
@@ -42,12 +74,11 @@
                 <input
                     type="password"
                     placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formState.password}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 />
             </div>
-        </form>
             <div className="flex flex-col justify-items-stretch mt-4">
             <button
                 type="submit"
@@ -56,8 +87,12 @@
                 Login
             </button>
             </div>
+        </form>
+        )}
     </div>
-    )
- }
+    );
+};
+  
+ 
 
  export default LoginPage;
