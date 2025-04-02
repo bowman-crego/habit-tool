@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>(
     thoughts: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Thought',
+        // ref: 'Habit',
       },
     ],
   },

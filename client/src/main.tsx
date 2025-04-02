@@ -5,6 +5,7 @@ import WelcomePage from './pages/WelcomePage.js'
 import CreateProfile from './pages/CreateProfile.js'
 import SetWeeklyGoals from './pages/SetWeeklyGoals.js'
 import UserProfile from './pages/UserProfile.js'
+import LoginPage from './pages/LoginPage.js'
 import './index.css'
 
 
@@ -19,6 +20,9 @@ const router = createBrowserRouter([
       }, {
         path: '/create-profile',
         element: <CreateProfile/>
+      },{
+        path: '/login-page',
+        element: <LoginPage/>
       }, {
         path: '/user',
         element: <UserProfile/>

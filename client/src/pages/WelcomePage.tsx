@@ -12,8 +12,9 @@ return (
             <div className="">Of</div>
             <div className="">Habit</div>
         </div>
-        <div>
-            <button onClick={() => navigate("/create-profile")}className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8">Let's Get Started</button>
+        <div className="flex flex-col justify-items-stretch mt-4">
+            <button onClick={() => navigate("/create-profile")}className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8 ">Create Profile</button>
+            <button onClick={() => navigate("/login-page")}className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8">Login</button>
         </div>
     </div>
 )

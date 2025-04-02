@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 const CreateProfile = () => {
 
-const [name, setName] = useState("");
+const [username, setUsername] = useState("");
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,12 +18,12 @@ return (
         <div className="text-white text-center text-6xl font-bold">Create Your Profile</div>
         <form onSubmit={handleSubmit} className="flex flex-col items-left mt-8">
             <div>
-                <label className="px-4">Name:</label>
+                <label className="px-4">Username:</label>
                 <input
                     type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="mb-4 p-2 rounded"
                 /> 
             </div>
@@ -57,13 +57,13 @@ return (
                     className="mb-4 p-2 rounded"
                 />
             </div>
-        </form>
             <button
                 type="submit"
                 className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8"
             >
                 Create Profile
             </button>
+        </form>
     </div>
 );
 
