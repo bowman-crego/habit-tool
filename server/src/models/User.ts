@@ -6,7 +6,7 @@ interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  thoughts: Schema.Types.ObjectId[];
+  habits: Schema.Types.ObjectId[];
   isCorrectPassword(password: string): Promise<boolean>;
 }
 
@@ -30,10 +30,11 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 5,
     },
-    thoughts: [
+    // Might explain why thoughts are attaching and shouldn't.
+    habits: [
       {
         type: Schema.Types.ObjectId,
-        // ref: 'Habit',
+        ref: 'Habit',
       },
     ],
   },

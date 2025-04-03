@@ -1,4 +1,4 @@
-// import Habit from './Habit.js';
+import Habit from './Habit.js';
 import User from './User.js';
 
-export { User };
+export { Habit, User };
