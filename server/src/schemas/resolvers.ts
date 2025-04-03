@@ -1,29 +1,13 @@
-<<<<<<< Updated upstream
 import { Habit, User } from '../models/index.js';
 import { signToken, AuthenticationError } from '../utils/auth.js'; 
 
 // Define types for the arguments
 interface AddUserArgs {
   input:{
-=======
-
-import  User from '../models/User.js';
-import { signToken, AuthenticationError } from '../utils/auth.js';
-
-interface AddUserArgs {
-    input: {
-        username: string;
-        email: string;
-        password: string;
-    };
-}
-interface LoginUserArgs {
->>>>>>> Stashed changes
     username: string;
     email: string;
     password: string;
   }
-<<<<<<< Updated upstream
 }
 
 interface LoginUserArgs {
@@ -121,55 +105,12 @@ const resolvers = {
     addHabit: async (_parent: any, { input }: AddHabitArgs, context: any) => {
       if (context.user) {
         const habit = await Habit.create({ ...input });
-=======
-  
-const resolvers = {
-    Query: {
-        users: async () => {
-            // Return an empty array or mock data for now
-            return User.find().populate('habits');
-        },
-    },
-    Mutation: {
-        addUser: async (_parent: any, { input }: AddUserArgs) => {
-            const user = await User.create({...input});
-            const token = signToken(user.username, user.email, user._id);
-
-            return { token, user };
-        },
-        login: async (_parent: any, { email, password }: LoginUserArgs) => {
-            // Find a user with the provided email
-            const user = await User.findOne({ email });
-          
-            // If no user is found, throw an AuthenticationError
-            if (!user) {
-              throw new AuthenticationError('Could not authenticate user.');
-            }
-          
-            // Check if the provided password is correct
-            const correctPw = await user.isCorrectPassword(password);
-          
-            // If the password is incorrect, throw an AuthenticationError
-            if (!correctPw) {
-              throw new AuthenticationError('Could not authenticate user.');
-            }
-          
-            // Sign a token with the user's information
-            const token = signToken(user.username, user.email, user._id);
-          
-            // Return the token and the user
-            return { token, user };
-          },
-    }
-};
->>>>>>> Stashed changes
 
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { habits: habit._id } }
         );
 
-<<<<<<< Updated upstream
         return habit;
       }
       throw AuthenticationError;
@@ -232,8 +173,3 @@ const resolvers = {
   };
 
 export default resolvers;
-=======
-
-
-export default resolvers;
->>>>>>> Stashed changes
