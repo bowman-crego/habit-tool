@@ -6,7 +6,11 @@ interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+<<<<<<< Updated upstream
   habits: Schema.Types.ObjectId[];
+=======
+//   thoughts: Schema.Types.ObjectId[];
+>>>>>>> Stashed changes
   isCorrectPassword(password: string): Promise<boolean>;
 }
 
@@ -30,6 +34,7 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 5,
     },
+<<<<<<< Updated upstream
     // Might explain why thoughts are attaching and shouldn't.
     habits: [
       {
@@ -37,6 +42,14 @@ const userSchema = new Schema<IUser>(
         ref: 'Habit',
       },
     ],
+=======
+    // thoughts: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     // ref: 'Habit',
+    //   },
+    // ],
+>>>>>>> Stashed changes
   },
   {
     timestamps: true,

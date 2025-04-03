@@ -1,29 +1,69 @@
-import React from "react";
+import {useState, type FormEvent, type ChangeEvent} from "react";
+import { useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
+// import { CREATE_PROFILE } from "../utils/mutations.js";
 // import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import Auth from "../utils/auth.js";
+import { ADD_USER } from "../utils/mutations";
+
+
 const CreateProfile = () => {
 
-const [username, setUsername] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
+    const [formState, setFormState] = useState({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+    const [addUser, { error, data }] = useMutation(ADD_USER);
 
-const handleSubmit = (e: React.FormEvent) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
+
+        setFormState({
+            ...formState,
+            [name]: value,
+        });
+    };
+
+const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("submitting form");
+
+    if (formState.password !== formState.confirmPassword) {
+        console.error("Passwords do not match");
+        return;
+    }
+
+    try {
+        const { data } = await addUser({
+            variables: { input: {username: formState.username, email: formState.email, password: formState.password} },
+   
+});
+    Auth.login(data.addUser.token);
+    } catch (e) {
+    console.error(e);
+    }
 };
 
 return (
     <div className="text-white bg-black h-screen flex flex-col justify-center items-center text-primary">
         <div className="text-white text-center text-6xl font-bold">Create Your Profile</div>
-        <form onSubmit={handleSubmit} className="flex flex-col items-left mt-8">
+        {data ? (
+            <p className="text-green-500">Success!
+            <Link to="/user-profile"></Link>
+            </p>
+        ) : (
+            <p className="text-red-500">{error?.message}</p>
+        )}
+        <form onSubmit={handleFormSubmit} className="flex flex-col items-left mt-8">
             <div>
                 <label className="px-4">Username:</label>
                 <input
-                    type="text"
                     placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    name="username"
+                    type="text"
+                    value={formState.username}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 /> 
             </div>
@@ -32,8 +72,9 @@ return (
                 <input
                     type="email"
                     placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formState.email}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 />
             </div>
@@ -41,9 +82,10 @@ return (
             <label className="px-4">Password:</label>
                 <input
                     type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    placeholder="*****"
+                    value={formState.password}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 />
             </div>
@@ -51,9 +93,10 @@ return (
             <label className="px-4">Confirm Password:</label>
                 <input
                     type="password"
+                    name="confirmPassword"
                     placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={formState.confirmPassword}
+                    onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 />
             </div>
