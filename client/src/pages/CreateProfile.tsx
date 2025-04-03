@@ -15,6 +15,8 @@ const CreateProfile = () => {
         password: "",
         confirmPassword: "",
     });
+
+    const [errorMessage, setErrorMessage] = useState("");
     const [addUser, { error, data }] = useMutation(ADD_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -30,10 +32,10 @@ const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (formState.password !== formState.confirmPassword) {
-        console.error("Passwords do not match");
+        setErrorMessage("Passwords do not match");
         return;
     }
-
+ setErrorMessage("");
     try {
         const { data } = await addUser({
             variables: { input: {username: formState.username, email: formState.email, password: formState.password} },
@@ -44,6 +46,8 @@ const handleFormSubmit = async (e: FormEvent) => {
     console.error(e);
     }
 };
+
+// need to add password hashing in local storage
 
 return (
     <div className="text-white bg-black h-screen flex flex-col justify-center items-center text-primary">
@@ -65,7 +69,7 @@ return (
                     value={formState.username}
                     onChange={handleChange}
                     className="mb-4 p-2 rounded"
-                /> 
+                    /> 
             </div>
             <div className="">
             <label className="px-4">Email:</label>
@@ -76,7 +80,7 @@ return (
                     value={formState.email}
                     onChange={handleChange}
                     className="mb-4 p-2 rounded"
-                />
+                    />
             </div>
             <div>
             <label className="px-4">Password:</label>
@@ -87,7 +91,7 @@ return (
                     value={formState.password}
                     onChange={handleChange}
                     className="mb-4 p-2 rounded"
-                />
+                    />
             </div>
             <div>
             <label className="px-4">Confirm Password:</label>
@@ -98,12 +102,16 @@ return (
                     value={formState.confirmPassword}
                     onChange={handleChange}
                     className="mb-4 p-2 rounded"
-                />
+                    />
             </div>
+            {errorMessage && (
+                <div className="text-red-500">{errorMessage}</div>
+
+            )}
             <button
                 type="submit"
                 className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black mt-8 py-4 px-8"
-            >
+                >
                 Create Profile
             </button>
         </form>
