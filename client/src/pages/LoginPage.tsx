@@ -11,7 +11,7 @@
         // email: '',
         password: ''
     });
-    const [login, { error, data }] = useMutation(LOGIN_USER);
+    const [login, { data }] = useMutation(LOGIN_USER); //removed error for test deployment
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
