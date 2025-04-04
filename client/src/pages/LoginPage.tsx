@@ -3,9 +3,10 @@
  import Auth from '../utils/auth.js';
  import { useMutation } from '@apollo/client';
  import { LOGIN_USER } from '../utils/mutations.js';
+import { useNavigate } from 'react-router-dom';
 
  const LoginPage = () => {
-
+    const navigate = useNavigate(); //pablo Added  <-- add this
     const [formState, setFormState] = useState({
         username: '',
         // email: '',
@@ -28,7 +29,11 @@
             const { data } = await login({
                 variables: { ...formState }
             });
-
+        // Save the token
+        Auth.login(data.login.token); // stores token in localStorage
+        console.log("Logging in successful, navigating to profile...");
+        // 🔀 Redirect to user profile page
+        navigate(`/user-profile/${formState.username}`);
         
         Auth.login(data.login.token);
         } catch (e) {
