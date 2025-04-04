@@ -11,7 +11,7 @@ interface AddUserArgs {
 }
 
 interface LoginUserArgs {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -79,9 +79,9 @@ const resolvers = {
       return { token, user };
     },
     
-    login: async (_parent: any, { email, password }: LoginUserArgs) => {
+    login: async (_parent: any, { username, password }: LoginUserArgs) => {
       // Find a user with the provided email
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ username });
     
       // If no user is found, throw an AuthenticationError
       if (!user) {

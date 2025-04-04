@@ -27,7 +27,7 @@ const typeDefs = `
 
   type Mutation {
     addUser(input: AddUserInput!): AuthPayload
-    login(email: String!, password: String!): AuthPayload
+    login(username: String!, password: String!): AuthPayload
     addHabit(input: AddHabitInput!): Habit
     removeHabit(habitId: ID!): Habit
   }

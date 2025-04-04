@@ -8,7 +8,7 @@
 
     const [formState, setFormState] = useState({
         username: '',
-        email: '',
+        // email: '',
         password: ''
     });
     const [login, { error, data }] = useMutation(LOGIN_USER);
@@ -37,7 +37,7 @@
 
         setFormState({
             username: '',
-            email: '',
+            // email: '',
             password: ''
         }); 
     };
@@ -53,26 +53,29 @@
                 <label className="px-4">Username:</label>
                 <input
                     type="text"
+                    name="username"
                     placeholder="Username"
                     value={formState.username}
                     onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 /> 
             </div>
-            <div className="">
+            {/* <div className="">
             <label className="px-4">Email:</label>
                 <input
                     type="email"
+                    name="email"
                     placeholder="Email"
                     value={formState.email}
                     onChange={handleChange}
                     className="mb-4 p-2 rounded"
                 />
-            </div>
+            </div> */}
             <div>
             <label className="px-4">Password:</label>
                 <input
                     type="password"
+                    name="password"
                     placeholder="Password"
                     value={formState.password}
                     onChange={handleChange}
