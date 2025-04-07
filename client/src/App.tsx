@@ -8,7 +8,6 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
 
-
 // import Header from './components/Header';
 // import Footer from './components/Footer';
 
@@ -36,13 +35,14 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 function App() {
+
   return (
     <ApolloProvider client={client}>
       <div className="flex-column justify-center align-center min-100-vh bg-primary">
         <Outlet />
       </div>
     </ApolloProvider>
-  );
+  )
 }
 
 export default App;

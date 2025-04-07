@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.js'
 import WelcomePage from './pages/WelcomePage.js'
 import CreateProfile from './pages/CreateProfile.js'
-import SetWeeklyGoals from './pages/SetWeeklyGoals.js'
 import UserProfile from './pages/UserProfile.js'
 import LoginPage from './pages/LoginPage.js'
 import './index.css'
@@ -27,9 +26,6 @@ const router = createBrowserRouter([
         path: '/user-profile/:username',
         element: <UserProfile/>
 
-      }, {
-        path: '/goals' ,
-        element: <SetWeeklyGoals/>
       },
     ],
   },

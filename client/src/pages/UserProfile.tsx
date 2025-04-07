@@ -1,15 +1,36 @@
 import { useQuery } from "@apollo/client";
 import Auth from "../utils/auth";
 import { QUERY_ME } from "../utils/queries";
-import { useState } from "react";
+import React, { useState } from "react";
+import HabitModal from "../components/habitModal";
 
-const UserProfile = () => {
+const UserProfile: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDay, setSelectedDay] = useState("Monday"); // Default to Monday
+  const [savedHabitsByDay, setSavedHabitsByDay] = useState<Record<string, string[]>>({
+    Sunday: [],
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+  });
+
+  const handleAddHabit = (habit: string, frequency: number, unit: string) => {
+    const newHabit = `${habit} (${frequency} ${unit})`;
+    setSavedHabitsByDay((prevHabits) => ({
+      ...prevHabits,
+      [selectedDay]: [...(prevHabits[selectedDay] || []), newHabit],
+    }));
+  };
+
   // Execute the QUERY_ME GraphQL query to fetch the current user's info
   const { loading, error, data } = useQuery(QUERY_ME);
 
   // Inside your component, after fetching user data
-  const [selectedDay, setSelectedDay] = useState("Monday"); // default to Monday
-  
+  // const [selectedDay, setSelectedDay] = useState("Monday"); // default to Monday
+
   // If the user is not logged in, show a message and block access to the profile
   if (!Auth.loggedIn()) {
     return (
@@ -62,7 +83,7 @@ const UserProfile = () => {
             {day.label}
           </button>
         ))}
-      </div>
+          </div>
 
       {/* Placeholder for day-specific content */}
       <div className="text-center">
@@ -71,8 +92,34 @@ const UserProfile = () => {
         </h2>
 
         {/* TODO: Filter/display habits based on the selected day */}
-        <p className="text-gray-400">No habits to show yet.</p>
-      </div>
+        {/* <p className="text-gray-400">No habits to show yet.</p> */}
+
+        <ul className="list-disc pl-6">
+          {(savedHabitsByDay[selectedDay] || []).map((habit, index) => (
+            <li key={index} className="mb-2">
+              {habit}
+            </li>
+          ))}
+        </ul>
+          </div>
+
+         {/* Add Habit Button */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+      >
+        Add Habit
+      </button>
+
+      {/* Habit Modal */}
+      <HabitModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAddHabit}
+        userName={user?.username || "Guest"}
+        habits={savedHabitsByDay[selectedDay] || []}
+      />
+
     </div>
   );
 };
