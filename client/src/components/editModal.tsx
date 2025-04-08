@@ -3,37 +3,41 @@ import React, { useState, useEffect } from "react";
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  habitToEdit: string;
-  onSave: (updatedHabit: string, frequency: number, unit: string, date: string) => void;
+  habits: string[];
+  onSave: (updatedHabit: string, frequency: number, unit: string) => void;
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSave }) => {
+const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, habits, onSave }) => {
   const [editedHabit, setEditedHabit] = useState("");
+  const [selectedHabit, setSelectedHabit] = useState(""); // Selected habit from the dropdown
   const [frequency, setFrequency] = useState<number | "">("");
   const [unit, setUnit] = useState("");
-  const [date, setDate] = useState("");
 
   // Reset the modal inputs when the modal opens
   useEffect(() => {
     if (isOpen) {
+      const defaultHabit = habits[0] || ""; // Default to the first habit in the list
+      setSelectedHabit(defaultHabit);
       setEditedHabit(""); // Set to empty string
       setFrequency("");
       setUnit("");
-      setDate(new Date().toISOString().split("T")[0]); // Set to today's date in YYYY-MM-DD format
     }
-  }, [isOpen]);
+  }, [isOpen, habits]);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (editedHabit.trim() && frequency && unit.trim() && date) {
-      onSave(editedHabit, Number(frequency), unit, date);
+    if (editedHabit.trim() && frequency && unit.trim()) {
+      onSave(editedHabit, Number(frequency), unit);
       // Clear the inputs after saving
       setEditedHabit("");
       setFrequency("");
       setUnit("");
-      setDate("");
       onClose(); // Close the modal
     }
+  };
+
+  const handleHabitChange = (newHabit: string) => {
+    setSelectedHabit(newHabit);
   };
 
   if (!isOpen) return null;
@@ -44,6 +48,19 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSave }) => {
         <h2 className="text-xl font-bold mb-4">Edit Habit</h2>
         <form onSubmit={handleSave}>
           <div className="flex flex-col gap-4">
+            {/* Habit Dropdown */}
+            <select
+              value={selectedHabit}
+              onChange={(e) => handleHabitChange(e.target.value)}
+              className="border rounded p-2 bg-black text-white"
+            >
+              {habits.map((habit, index) => (
+                <option key={index} value={habit}>
+                  {habit}
+                </option>
+              ))}
+            </select>
+
             {/* Custom Habit Input */}
             <input
               type="text"
@@ -68,14 +85,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSave }) => {
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
               placeholder="Enter unit"
-              className="border rounded p-2"
-            />
-
-            {/* Date Input */}
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
               className="border rounded p-2"
             />
 
