@@ -120,7 +120,7 @@ const UserProfile: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAdd={handleAddHabit}
-        userName={user?.username || "Guest"}
+        username={user?.username || "Guest"}
         habits={savedHabitsByDay[selectedDay] || []}
       />
 
