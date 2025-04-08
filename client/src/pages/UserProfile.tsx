@@ -1,30 +1,57 @@
+import React, { useState } from "react";
+import HabitModal from "../components/habitModal";
+import EditModal from "../components/editModal"; // Import the EditModal component
 import { useQuery } from "@apollo/client";
 import Auth from "../utils/auth";
 import { QUERY_ME } from "../utils/queries";
-import { useState } from "react";
 
-const UserProfile = () => {
-  // Execute the QUERY_ME GraphQL query to fetch the current user's info
+const UserProfile: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false); // For Add Habit Modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // For Edit Habit Modal
+  const [selectedDay, setSelectedDay] = useState("Monday"); // Default to Monday
+  const [savedHabitsByDay, setSavedHabitsByDay] = useState<Record<string, string[]>>({
+    Sunday: [],
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+  });
+  const [habitToEdit, setHabitToEdit] = useState<string | null>(null); // Track the habit being edited
+
+  const handleAddHabit = (habit: string, frequency: number, unit: string) => {
+    const newHabit = `${habit} (${frequency} ${unit})`;
+    setSavedHabitsByDay((prevHabits) => ({
+      ...prevHabits,
+      [selectedDay]: [...(prevHabits[selectedDay] || []), newHabit],
+    }));
+  };
+
+  const handleEditHabit = (updatedHabit: string, frequency: number, unit: string, date: string) => {
+    if (habitToEdit) {
+      const newHabit = `${updatedHabit} (${frequency} ${unit}) - ${date}`; // Combine habit, frequency, unit, and date
+      setSavedHabitsByDay((prevHabits) => ({
+        ...prevHabits,
+        [selectedDay]: prevHabits[selectedDay].map((habit) =>
+          habit === habitToEdit ? newHabit : habit
+        ),
+      }));
+      setHabitToEdit(null); // Clear the habit being edited
+      setIsEditModalOpen(false); // Close the Edit Modal
+    }
+  };
+  
   const { loading, error, data } = useQuery(QUERY_ME);
 
-  // Inside your component, after fetching user data
-  const [selectedDay, setSelectedDay] = useState("Monday"); // default to Monday
-  
-  // If the user is not logged in, show a message and block access to the profile
   if (!Auth.loggedIn()) {
-    return (
-      <p style={{ textAlign: "center" }}>Please log in to view your profile.</p>
-    );
+    return <p style={{ textAlign: "center" }}>Please log in to view your profile.</p>;
   }
 
-  // While the query is still loading, show a loading message
   if (loading) return <p>Loading your profile...</p>;
-  // If there was an error while fetching the data, show an error message
   if (error) return <p>Error loading profile 😢</p>;
 
-  // Once data is loaded successfully, store the user info
   const user = data?.me;
-
 
   const days = [
     { label: "S", name: "Sunday" },
@@ -35,19 +62,15 @@ const UserProfile = () => {
     { label: "F", name: "Friday" },
     { label: "S", name: "Saturday" },
   ];
+
   return (
-    // header Div for the user profile page
     <div className="bg-black min-h-screen text-white flex flex-col items-center">
       <div className="w-full py-6 shadow-md text-center">
-        <h1 className="text-3xl md:text-4xl font-bold">
-          Welcome, {user?.username}!
-        </h1>
+        <h1 className="text-3xl md:text-4xl font-bold">Welcome, {user?.username}!</h1>
       </div>
 
-      {/* Spacer */}
       <div className="h-4"></div>
 
-      {/* Day Buttons */}
       <div className="flex gap-2 mb-8">
         {days.map((day, index) => (
           <button
@@ -64,15 +87,49 @@ const UserProfile = () => {
         ))}
       </div>
 
-      {/* Placeholder for day-specific content */}
       <div className="text-center">
-        <h2 className="text-xl font-semibold mb-4">
-          Goals for {selectedDay === "S" ? "Sunday" : selectedDay}
-        </h2>
-
-        {/* TODO: Filter/display habits based on the selected day */}
-        <p className="text-gray-400">No habits to show yet.</p>
+        <h2 className="text-xl font-semibold mb-4">Goals for {selectedDay}</h2>
+        <ul className="list-disc pl-6">
+          {(savedHabitsByDay[selectedDay] || []).map((habit, index) => (
+            <li key={index} className="mb-2 flex justify-between items-center">
+              <span>{habit}</span>
+              <button
+                onClick={() => {
+                  setHabitToEdit(habit); // Set the habit to edit
+                  setIsEditModalOpen(true); // Open the Edit Modal
+                }}
+                className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              >
+                Edit
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
+
+      <div className="flex gap-4 mt-4">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+        >
+          Add Habit
+        </button>
+      </div>
+
+      <HabitModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAddHabit}
+        userName={user?.username || "Guest"}
+        habits={savedHabitsByDay[selectedDay] || []}
+      />
+
+      <EditModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        habitToEdit={habitToEdit || ""}
+        onSave={handleEditHabit}
+      />
     </div>
   );
 };
