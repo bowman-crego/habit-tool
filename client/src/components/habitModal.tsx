@@ -100,13 +100,15 @@ const handleSubmit = async (e: React.FormEvent) => {
               />
             </div>
 
+            <p className="text-right">per day</p>
+
             {/* Buttons */}
             <div className="flex gap-4 mt-4">
               <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex-1"
               >
-                Add
+                Save
               </button>
               <button
                 onClick={onClose}
