@@ -134,7 +134,7 @@ const UserProfile: React.FC = () => {
   {/* Add Habit Button */}
   <button
     onClick={() => setIsModalOpen(true)}
-    className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+    className="px-6 py-3 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
   >
     Add Habit
   </button>
@@ -145,7 +145,7 @@ const UserProfile: React.FC = () => {
       setHabitToEdit(savedHabitsByDay[selectedDay][0] || ""); // Default to the first habit
       setIsEditModalOpen(true);
     }}
-    className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+    className="px-6 py-3 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
   >
     Edit Habit
   </button>
