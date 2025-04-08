@@ -27,6 +27,9 @@ interface AddHabitArgs {
   input:{
     habitText: string;
     habitUsername: string;
+    targetGoal: number;
+    targetGoalUnit: string;
+    habitDate: string;
 
   }
 }

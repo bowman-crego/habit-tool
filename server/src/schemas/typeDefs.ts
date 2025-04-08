@@ -41,6 +41,9 @@ const typeDefs = `
   input AddHabitInput {
     habitText: String!
     habitUsername: String!
+    targetGoal: Int!
+    targetGoalUnit: String!
+    habitDate: String!
   }
 
   type AuthPayload {

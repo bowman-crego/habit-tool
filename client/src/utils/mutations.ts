@@ -24,20 +24,19 @@ export const ADD_USER = gql`
 }
 `;
 
-// export const ADD_THOUGHT = gql`
-//   mutation AddThought($input: ThoughtInput!) {
-//     addThought(input: $input) {
-//       _id
-//       thoughtText
-//       thoughtAuthor
-//       createdAt
-//       comments {
-//         _id
-//         commentText
-//       }
-//     }
-//   }
-// `;
+export const ADD_HABIT = gql`
+  mutation AddHabit($input: AddHabitInput!) {
+    addHabit(input: $input) {
+      _id
+      habitText
+      habitUsername
+      targetGoal
+      targetGoalUnit
+      habitDate
+    }
+  }
+`;
+
 
 // export const ADD_COMMENT = gql`
 //   mutation addComment($thoughtId: ID!, $commentText: String!) {
