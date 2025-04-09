@@ -11,15 +11,16 @@ const UserProfile: React.FC = () => {
   const [habitToEdit, setHabitToEdit] = useState<string | null>(null); // Track the habit being edited
   const [selectedDay, setSelectedDay] = useState("Monday"); // Default to Monday
   const [currentDate, setCurrentDate] = useState(new Date()); // Track the current date
-  const [savedHabitsByDay, setSavedHabitsByDay] = useState<Record<string, string[]>>({
-    Sunday: [],
-    Monday: [],
-    Tuesday: [],
-    Wednesday: [],
-    Thursday: [],
-    Friday: [],
-    Saturday: [],
-  });
+  const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null); // Track the selected habit ID locally
+  // const [savedHabitsByDay, setSavedHabitsByDay] = useState<Record<string, string[]>>({
+  //   Sunday: [],
+  //   Monday: [],
+  //   Tuesday: [],
+  //   Wednesday: [],
+  //   Thursday: [],
+  //   Friday: [],
+  //   Saturday: [],
+  // });
 
     // Update the current date at midnight
     useEffect(() => {
@@ -34,29 +35,30 @@ const UserProfile: React.FC = () => {
       return () => clearTimeout(timer); // Cleanup the timer
     }, [currentDate]);
 
-  const handleAddHabit = (habit: string, frequency: number, unit: string) => {
-    const newHabit = `${habit} (${frequency} ${unit})`;
-    setSavedHabitsByDay((prevHabits) => ({
-      ...prevHabits,
-      [selectedDay]: [...(prevHabits[selectedDay] || []), newHabit],
-    }));
-  };
+  // const handleAddHabit = (habit: string, frequency: number, unit: string) => {
+  //   const newHabit = `${habit} (${frequency} ${unit})`;
+  //   setSavedHabitsByDay((prevHabits) => ({
+  //     ...prevHabits,
+  //     [selectedDay]: [...(prevHabits[selectedDay] || []), newHabit],
+  //   }));
+  // };
 
-  const handleEditHabit = (updatedHabit: string, frequency: number, unit: string) => {
-    if (habitToEdit) {
-      const newHabit = `${updatedHabit} (${frequency} ${unit}) `; // Combine habit, frequency, unit
-      setSavedHabitsByDay((prevHabits) => ({
-        ...prevHabits,
-        [selectedDay]: prevHabits[selectedDay].map((habit) =>
-          habit === habitToEdit ? newHabit : habit
-        ),
-      }));
-      setHabitToEdit(null); // Clear the habit being edited
-      setIsEditModalOpen(false); // Close the Edit Modal
-    }
-  };
+  // const handleEditHabit = (updatedHabit: string, frequency: number, unit: string) => {
+  //   if (habitToEdit) {
+  //     const newHabit = `${updatedHabit} (${frequency} ${unit}) `; // Combine habit, frequency, unit
+  //     setSavedHabitsByDay((prevHabits) => ({
+  //       ...prevHabits,
+  //       [selectedDay]: prevHabits[selectedDay].map((habit) =>
+  //         habit === habitToEdit ? newHabit : habit
+  //       ),
+  //     }));
+  //     setHabitToEdit(null); // Clear the habit being edited
+  //     setIsEditModalOpen(false); // Close the Edit Modal
+  //   }
+  // };
   
   const { loading, error, data } = useQuery(QUERY_ME);
+  // console.log("QUERY_ME data:", data);
 
   if (!Auth.loggedIn()) {
     return <p style={{ textAlign: "center" }}>Please log in to view your profile.</p>;
@@ -99,7 +101,6 @@ const UserProfile: React.FC = () => {
       <div className="w-full py-6 shadow-md text-center">
         <h1 className="text-3xl md:text-4xl font-bold">Welcome, {user?.username}!</h1>
       </div>
-
         <p className="text-lg text-gray-400">{getDateForSelectedDay()}</p> {/* Display the date */}
       <div className="h-4"></div>
 
@@ -119,51 +120,59 @@ const UserProfile: React.FC = () => {
         ))}
       </div>
 
-      <div className="text-center">
-        <h2 className="text-xl font-semibold mb-4">Goals for {selectedDay}</h2>
+       {/* Habit List */}
+       <div className="text-center">
+        <h2 className="text-xl font-semibold mb-4">All Your Habits</h2>
         <ul className="list-disc pl-6">
-          {(savedHabitsByDay[selectedDay] || []).map((habit, index) => (
-            <li key={index} className="mb-2 flex justify-between items-center">
-              {habit}
+          {user.habits.map((habit: any, index: number) => (
+            <li key={habit._id || index} className="mb-2 flex justify-between items-center">
+              <div>
+                <p className="font-semibold">{habit.habitText}</p>
+                <p className="text-sm text-gray-300">
+                  {habit.actualPerformance ?? 0}/{habit.targetGoal} {habit.targetGoalUnit} —{" "}
+                  {habit.progress ?? 0}% complete
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setHabitToEdit(habit.habitText);
+                  setSelectedHabitId(habit._id);
+                  setIsEditModalOpen(true);
+                }}
+                className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              >
+                Edit
+              </button>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="flex gap-4 mt-4">
-  {/* Add Habit Button */}
+      {/* Modals */}
+      {/* Add Habit Button */}
+<div className="flex justify-center mt-8 mb-12">
   <button
     onClick={() => setIsModalOpen(true)}
-    className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+    className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black py-4 px-8"
   >
     Add Habit
-  </button>
-
-  {/* Edit Habit Button */}
-  <button
-    onClick={() => {
-      setHabitToEdit(savedHabitsByDay[selectedDay][0] || ""); // Default to the first habit
-      setIsEditModalOpen(true);
-    }}
-    className="px-6 py-3 bg-blue-500 text-white rounded-lg"
-  >
-    Edit Habit
   </button>
 </div>
 
       <HabitModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddHabit}
+        onAdd={() => {}}
         username={user?.username || "Guest"}
-        habits={savedHabitsByDay[selectedDay] || []}
+        habits={user.habits}
       />
 
       <EditModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        habits={savedHabitsByDay[selectedDay] || []}
-        onSave={handleEditHabit}
+        habits={user.habits.map((habit: any) => habit.habitText)}
+        habitId={selectedHabitId || ""}
+        onSave={() => {}}
       />
     </div>
   );
