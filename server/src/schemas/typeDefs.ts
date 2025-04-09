@@ -47,7 +47,7 @@ const typeDefs = `
     targetGoal: Int!
     targetGoalUnit: String!
     habitDate: String!
-     actualPerformance: Int      
+    actualPerformance: Int      
     actualPerformanceUnit: String
   }
     input UpdateHabitInput {

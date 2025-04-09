@@ -8,6 +8,7 @@ interface HabitModalProps {
   onAdd: (habit: string, frequency: number, goalUnit: string,) => void;
   habits: string[];
   username: string;
+  selectedDay: string;
 }
 
 const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, onAdd, username }) => {
@@ -37,7 +38,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               targetGoalUnit: unit,
               habitDate: new Date().toISOString(),
               actualPerformance: 0,           // ✅ Add these
-              actualPerformanceUnit: "",
+              actualPerformanceUnit: "", // Pass the selected day
             },
           }
         });
