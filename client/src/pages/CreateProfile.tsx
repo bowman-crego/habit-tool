@@ -1,14 +1,15 @@
-import {useState, type FormEvent, type ChangeEvent} from "react";
+import {useState, type FormEvent, type ChangeEvent, useEffect} from "react";
 import { useMutation } from "@apollo/client";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { CREATE_PROFILE } from "../utils/mutations.js";
 // import { useNavigate } from "react-router-dom";
 import Auth from "../utils/auth.js";
 import { ADD_USER } from "../utils/mutations";
 
 
-const CreateProfile = () => {
 
+const CreateProfile = () => {
+    const navigate = useNavigate();//pablo Added  <-- add this
     const [formState, setFormState] = useState({
         username: "",
         email: "",
@@ -47,15 +48,24 @@ const handleFormSubmit = async (e: FormEvent) => {
     }
 };
 
+useEffect(() => {
+    if (data) {
+        const timer = setTimeout(() => {
+            // Redirect to login page after 3 seconds
+            navigate("/login-page");
+        }, 2000);
+        return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }
+}, [data, navigate]);
+        // Redirect to user profile page
+
 // need to add password hashing in local storage
 
 return (
     <div className="text-white bg-black h-screen flex flex-col justify-center items-center text-primary">
         <div className="text-white text-center text-6xl font-bold">Create Your Profile</div>
         {data ? (
-            <p className="text-green-500">Success!
-            <Link to="/user-profile"></Link>
-            </p>
+            <p className="text-green-500">Success! Redirecting to login page...</p>
         ) : (
             <p className="text-red-500">{error?.message}</p>
         )}

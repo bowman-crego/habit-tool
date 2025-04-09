@@ -87,7 +87,7 @@ const handleDeleteHabit = async (habitId: string) => {
   if (error) return <p>Error loading profile 😢</p>;
 
   const user = data?.me;
-
+  console.log("User habits:", user.habits);
   const days = [
     { label: "S", name: "Sunday" },
     { label: "M", name: "Monday" },
@@ -97,6 +97,9 @@ const handleDeleteHabit = async (habitId: string) => {
     { label: "F", name: "Friday" },
     { label: "S", name: "Saturday" },
   ];
+
+  // TODO: Filter the habits based on the selected day
+  // const filteredHabits = user.habits.filter((habit: any) => habit.day === selectedDay);
 
   // Calculate the date for the selected day
   const getDateForSelectedDay = () => {
@@ -203,6 +206,7 @@ const handleDeleteHabit = async (habitId: string) => {
         onAdd={() => {}}
         username={user?.username || "Guest"}
         habits={user.habits}
+        selectedDay={selectedDay}
       />
 
       <EditModal
