@@ -4,6 +4,9 @@ import EditModal from "../components/editModal"; // Import the EditModal compone
 import { useQuery } from "@apollo/client";
 import Auth from "../utils/auth";
 import { QUERY_ME } from "../utils/queries";
+// Delete button imports
+import { useMutation } from "@apollo/client";
+import { REMOVE_HABIT } from "../utils/mutations"; // Import the mutation
 
 const UserProfile: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // For Add Habit Modal
@@ -56,6 +59,22 @@ const UserProfile: React.FC = () => {
   //     setIsEditModalOpen(false); // Close the Edit Modal
   //   }
   // };
+  
+// delete button logic
+const [removeHabit] = useMutation(REMOVE_HABIT, {
+  refetchQueries: [{ query: QUERY_ME }], // Refetch the user's habits after deletion
+});
+
+const handleDeleteHabit = async (habitId: string) => {
+  try {
+    await removeHabit({
+      variables: { habitId },
+    });
+    console.log(`Habit with ID ${habitId} deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting habit:", error);
+  }
+};
   
   const { loading, error, data } = useQuery(QUERY_ME);
   // console.log("QUERY_ME data:", data);
@@ -132,6 +151,12 @@ const UserProfile: React.FC = () => {
                   {habit.actualPerformance ?? 0}/{habit.targetGoal} {habit.targetGoalUnit} —{" "}
                   {habit.progress ?? 0}% complete
                 </p>
+                <button
+          onClick={() => handleDeleteHabit(habit._id)}
+          className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+        >
+          Delete
+        </button>
               </div>
               
             </li>
