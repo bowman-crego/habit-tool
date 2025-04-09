@@ -141,8 +141,7 @@ const UserProfile: React.FC = () => {
 
       {/* Modals */}
       {/* Add Habit Button */}
-{/* Add and Edit Buttons fixed at the bottom */}
-<div className="fixed bottom-4 w-full flex justify-center gap-4">
+<div className="flex justify-center gap-4 mt-8 mb-12">
   <button
     onClick={() => setIsModalOpen(true)}
     className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black py-4 px-8 shadow-lg"
@@ -151,15 +150,15 @@ const UserProfile: React.FC = () => {
   </button>
   <button
     onClick={() => {
-      const firstHabit = user.habits[0];
-      setHabitToEdit(firstHabit?.habitText || "");
-      setSelectedHabitId(firstHabit?._id || "");
-      setIsEditModalOpen(true);
+      Auth.logout(); // Clear the authentication token
+      window.location.assign("/login-page"); // Redirect to the login page
     }}
-    className="bg-yellow-500 hover:bg-yellow-400 rounded-full font-bold text-black py-4 px-8 shadow-lg"
+    className="bg-gray-700 text-white px-4 py-2 rounded-full font-bold hover:bg-gray-500 flex-1"
   >
-    Edit Habit
+    Logout
   </button>
+  <div className="flex justify-center mt-4">
+</div>
 </div>
 
       <HabitModal
