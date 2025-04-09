@@ -150,6 +150,17 @@ const UserProfile: React.FC = () => {
   </button>
   <button
     onClick={() => {
+      const firstHabit = user.habits[0];
+      setHabitToEdit(firstHabit?.habitText || "");
+      setSelectedHabitId(firstHabit?._id || "");
+      setIsEditModalOpen(true);
+    }}
+    className="bg-yellow-500 hover:bg-yellow-400 rounded-full font-bold text-black py-4 px-8 shadow-lg"
+  >
+    Edit Habit
+  </button>
+  <button
+    onClick={() => {
       Auth.logout(); // Clear the authentication token
       window.location.assign("/login-page"); // Redirect to the login page
     }}
