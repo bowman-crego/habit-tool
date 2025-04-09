@@ -13,6 +13,24 @@ export const QUERY_USER = gql`
     }
   }
 `;
+export const GET_USER_HABITS = gql`
+  query GetUserHabits($username: String!) {
+    user(username: $username) {
+      _id
+      username
+      habits {
+        _id
+        habitText
+        habitDate
+        targetGoal
+        targetGoalUnit
+        actualPerformance
+        actualPerformanceUnit
+        progress
+      }
+    }
+  }
+`;
 
 // export const QUERY_THOUGHTS = gql`
 //   query getThoughts {
@@ -52,6 +70,12 @@ export const QUERY_ME = gql`
         _id
         habitText
         habitUsername
+        habitDate
+        targetGoal
+        targetGoalUnit
+        actualPerformance
+        actualPerformanceUnit
+        progress
       }
     }
   }

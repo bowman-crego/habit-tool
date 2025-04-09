@@ -1,10 +1,11 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { ADD_HABIT } from '../utils/mutations'; // Import the ADD_HABIT mutation
+
 interface HabitModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (habit: string, frequency: number, unit: string) => void;
+  onAdd: (habit: string, frequency: number, goalUnit: string,) => void;
   habits: string[];
   username: string;
 }
@@ -14,7 +15,10 @@ const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, onAdd, usernam
   const [selectedHabit, setSelectedHabit] = useState('');
   const [frequency, setFrequency] = useState<number | ''>('');
   const [unit, setUnit] = useState('');
-  const [addHabit] = useMutation(ADD_HABIT);
+  const [addHabit] = useMutation(ADD_HABIT, {
+    refetchQueries: ['QUERY_ME'], // Refetch the user query after adding a habit
+  });
+  
   const presetHabits = ['Exercise', 'Sleep', 'Reading', 'Gaming'];
 
   if (!isOpen) return null;
@@ -32,6 +36,8 @@ const handleSubmit = async (e: React.FormEvent) => {
               targetGoal: frequency,
               targetGoalUnit: unit,
               habitDate: new Date().toISOString(),
+              actualPerformance: 0,           // ✅ Add these
+              actualPerformanceUnit: "",
             },
           }
         });
@@ -40,6 +46,9 @@ const handleSubmit = async (e: React.FormEvent) => {
       setNewHabit('');
       setFrequency('');
       setUnit('');
+      window.location.reload(); // reload the page to see the new habit
+      // ✅ Close the modal after save
+      onClose();
 
     } catch (error) {
       console.error('Error adding habit:', error);
@@ -86,7 +95,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 type="number"
                 value={frequency}
                 onChange={(e) => setFrequency(e.target.value ? parseInt(e.target.value) : '')}
-                placeholder="Enter frequency"
+                placeholder="Time for this habit"
                 className="border rounded p-2 bg-black text-white w-2/3"
               />
 
