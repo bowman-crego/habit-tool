@@ -11,7 +11,7 @@ import { REMOVE_HABIT } from "../utils/mutations"; // Import the mutation
 const UserProfile: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // For Add Habit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // For Edit Habit Modal
-  const [habitToEdit, setHabitToEdit] = useState<string | null>(null); // Track the habit being edited
+  const [_habitToEdit, setHabitToEdit] = useState<string | null>(null); // Track the habit being edited
   const [selectedDay, setSelectedDay] = useState("Monday"); // Default to Monday
   const [currentDate, setCurrentDate] = useState(new Date()); // Track the current date
   const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null); // Track the selected habit ID locally
