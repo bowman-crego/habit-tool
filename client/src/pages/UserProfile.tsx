@@ -133,16 +133,7 @@ const UserProfile: React.FC = () => {
                   {habit.progress ?? 0}% complete
                 </p>
               </div>
-              <button
-                onClick={() => {
-                  setHabitToEdit(habit.habitText);
-                  setSelectedHabitId(habit._id);
-                  setIsEditModalOpen(true);
-                }}
-                className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-              >
-                Edit
-              </button>
+              
             </li>
           ))}
         </ul>
@@ -150,12 +141,24 @@ const UserProfile: React.FC = () => {
 
       {/* Modals */}
       {/* Add Habit Button */}
-<div className="flex justify-center mt-8 mb-12">
+{/* Add and Edit Buttons fixed at the bottom */}
+<div className="fixed bottom-4 w-full flex justify-center gap-4">
   <button
     onClick={() => setIsModalOpen(true)}
-    className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black py-4 px-8"
+    className="bg-teal-500 hover:bg-teal-300 rounded-full font-bold text-black py-4 px-8 shadow-lg"
   >
     Add Habit
+  </button>
+  <button
+    onClick={() => {
+      const firstHabit = user.habits[0];
+      setHabitToEdit(firstHabit?.habitText || "");
+      setSelectedHabitId(firstHabit?._id || "");
+      setIsEditModalOpen(true);
+    }}
+    className="bg-yellow-500 hover:bg-yellow-400 rounded-full font-bold text-black py-4 px-8 shadow-lg"
+  >
+    Edit Habit
   </button>
 </div>
 
