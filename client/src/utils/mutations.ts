@@ -48,7 +48,15 @@ mutation EditHabit($habitId: ID!, $input: AddHabitInput!) {
   }
 }
 `;
-
+// JBNOTE: Delete Mutation
+export const REMOVE_HABIT = gql`
+  mutation RemoveHabit($habitId: ID!) {
+    removeHabit(habitId: $habitId) {
+      _id
+      habitText
+    }
+  }
+`;
 
 // export const ADD_COMMENT = gql`
 //   mutation addComment($thoughtId: ID!, $commentText: String!) {

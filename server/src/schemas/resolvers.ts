@@ -157,6 +157,8 @@ const resolvers = {
     //   throw AuthenticationError;
     // },
     removeHabit: async (_parent: any, { habitId }: HabitArgs, context: any) => {
+      console.log("Context User:", context.user);
+      console.log("Habit ID:", habitId);    
       if (context.user) {
         const habit = await Habit.findOneAndDelete({
           _id: habitId,
@@ -174,7 +176,9 @@ const resolvers = {
 
         return habit;
       }
-      throw AuthenticationError;
+      //throw AuthenticationError;
+      console.log("User not authenticated.");
+      throw new AuthenticationError("You need to be logged in!");
     },
 
     editHabit: async (_parent: any, { habitId, input }: EditHabitArgs, context: any) => {
