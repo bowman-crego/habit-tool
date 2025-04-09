@@ -15,6 +15,7 @@ interface IHabit extends Document {
   targetGoalUnit: string;
   actualPerformance: number;
   actualPerformanceUnit: string;
+  progress: number;
 }
 // JBNOTE: Commenting out. Not sure we'll need this.
 // Define the schema for the Comment subdocument
@@ -95,10 +96,18 @@ const habitSchema = new Schema<IHabit>(
     actualPerformance: {
       type: Number,
       trim: true,
+      default: 0,
     },
     actualPerformanceUnit: {
       type: String,
-      trim: true
+      trim: true,
+      default: "",
+    },
+    progress: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
     }
   }
 );

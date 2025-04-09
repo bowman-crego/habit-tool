@@ -36,6 +36,18 @@ export const ADD_HABIT = gql`
     }
   }
 `;
+export const EDIT_HABIT = gql`
+mutation EditHabit($habitId: ID!, $input: AddHabitInput!) {
+  editHabit(habitId: $habitId, input: $input) {
+    actualPerformance
+    actualPerformanceUnit
+    targetGoalUnit
+    targetGoal
+    habitText
+    _id
+  }
+}
+`;
 
 
 // export const ADD_COMMENT = gql`
