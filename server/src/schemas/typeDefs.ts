@@ -15,6 +15,7 @@ const typeDefs = `
     targetGoalUnit: String!
     actualPerformance: Int
     actualPerformanceUnit: String
+    progress: Int
   }
 
   type Query {
@@ -26,11 +27,13 @@ const typeDefs = `
   }
 
   type Mutation {
-    addUser(input: AddUserInput!): AuthPayload
-    login(username: String!, password: String!): AuthPayload
-    addHabit(input: AddHabitInput!): Habit
-    removeHabit(habitId: ID!): Habit
-  }
+  addUser(input: AddUserInput!): AuthPayload
+  login(username: String!, password: String!): AuthPayload
+  addHabit(input: AddHabitInput!): Habit
+  removeHabit(habitId: ID!): Habit
+  editHabit(habitId: ID!, input: AddHabitInput!): Habit
+}
+
 
   input AddUserInput {
     username: String!
@@ -41,7 +44,23 @@ const typeDefs = `
   input AddHabitInput {
     habitText: String!
     habitUsername: String!
+    targetGoal: Int!
+    targetGoalUnit: String!
+    habitDate: String!
+    actualPerformance: Int      
+    actualPerformanceUnit: String
   }
+    input UpdateHabitInput {
+  habitText: String
+  habitUsername: String
+  habitDate: String
+  targetGoal: Int
+  targetGoalUnit: String
+  actualPerformance: Int
+  actualPerformanceUnit: String
+  progress: Int
+}
+  
 
   type AuthPayload {
     token: String!

@@ -1,11 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-// Define an interface for the Thought document
-// JBNOTE: Not sure we'll need this.
-// interface IComment extends Document {
-//   commentText: string;
-//   createdAt: Date;
-// }
+
 
 interface IHabit extends Document {
   habitText: string;
@@ -15,49 +10,11 @@ interface IHabit extends Document {
   targetGoalUnit: string;
   actualPerformance: number;
   actualPerformanceUnit: string;
+  progress: number;
 }
-// JBNOTE: Commenting out. Not sure we'll need this.
-// Define the schema for the Comment subdocument
-// const commentSchema = new Schema<IComment>(
-//   {
-//     commentText: {
-//       type: String,
-//       required: true,
-//       minlength: 1,
-//       maxlength: 280,
-//     },
-//   },
-//   {
-//     _id: false,
-//     toJSON: { getters: true },
-//     toObject: { getters: true },
-//     timestamps: true,
-//   }
-// );
 
-// Define the schema for the Thought document
 const habitSchema = new Schema<IHabit>(
-  // JBNOTE: Commented this out for reference. We can probably delete once we validate everything is working.
-  // {
-  //   thoughtText: {
-  //     type: String,
-  //     required: true,
-  //     minlength: 1,
-  //     maxlength: 280,
-  //     trim: true,
-  //   },
-  //   thoughtAuthor: {
-  //     type: String,
-  //     required: true,
-  //     trim: true,
-  //   },
-  //   comments: [commentSchema],
-  // },
-  // {
-  //   timestamps: true,
-  //   toJSON: { getters: true },
-  //   toObject: { getters: true },
-  // }
+  
   {
     habitText: {
       type: String,
@@ -95,10 +52,18 @@ const habitSchema = new Schema<IHabit>(
     actualPerformance: {
       type: Number,
       trim: true,
+      default: 0,
     },
     actualPerformanceUnit: {
       type: String,
-      trim: true
+      trim: true,
+      default: "",
+    },
+    progress: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
     }
   }
 );

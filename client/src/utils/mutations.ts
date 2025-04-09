@@ -24,20 +24,39 @@ export const ADD_USER = gql`
 }
 `;
 
-// export const ADD_THOUGHT = gql`
-//   mutation AddThought($input: ThoughtInput!) {
-//     addThought(input: $input) {
-//       _id
-//       thoughtText
-//       thoughtAuthor
-//       createdAt
-//       comments {
-//         _id
-//         commentText
-//       }
-//     }
-//   }
-// `;
+export const ADD_HABIT = gql`
+  mutation AddHabit($input: AddHabitInput!) {
+    addHabit(input: $input) {
+      _id
+      habitText
+      habitUsername
+      targetGoal
+      targetGoalUnit
+      habitDate
+    }
+  }
+`;
+export const EDIT_HABIT = gql`
+mutation EditHabit($habitId: ID!, $input: AddHabitInput!) {
+  editHabit(habitId: $habitId, input: $input) {
+    actualPerformance
+    actualPerformanceUnit
+    targetGoalUnit
+    targetGoal
+    habitText
+    _id
+  }
+}
+`;
+// JBNOTE: Delete Mutation
+export const REMOVE_HABIT = gql`
+  mutation RemoveHabit($habitId: ID!) {
+    removeHabit(habitId: $habitId) {
+      _id
+      habitText
+    }
+  }
+`;
 
 // export const ADD_COMMENT = gql`
 //   mutation addComment($thoughtId: ID!, $commentText: String!) {

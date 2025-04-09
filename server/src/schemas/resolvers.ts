@@ -25,9 +25,27 @@ interface HabitArgs {
 
 interface AddHabitArgs {
   input:{
+    actualPerformance: number;
     habitText: string;
     habitUsername: string;
+    targetGoal: number;
+    targetGoalUnit: string;
+    habitDate: string;
 
+  }
+}
+interface EditHabitArgs {
+  habitId: string;
+  input:{
+    habitText: string;
+    habitUsername: string;
+    habitDate: string;
+    targetGoal: number;
+    targetGoalUnit: string;
+    actualPerformance: number;
+    actualPerformanceUnit: string;
+    progress: number;
+    
   }
 }
 
@@ -104,18 +122,23 @@ const resolvers = {
     },
     addHabit: async (_parent: any, { input }: AddHabitArgs, context: any) => {
       if (context.user) {
-        const habit = await Habit.create({ ...input });
-
+        const habit = await Habit.create({
+          ...input,
+          actualPerformance: input.actualPerformance ?? 0,
+          actualPerformanceUnit: input.actualPerformance ?? "",
+          progress: 0, // or compute it here if you want
+        });
+    
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { habits: habit._id } }
         );
-
+    
         return habit;
       }
       throw AuthenticationError;
-      ('You need to be logged in!');
     },
+    
     // addComment: async (_parent: any, { thoughtId, commentText }: AddCommentArgs, context: any) => {
     //   if (context.user) {
     //     return Thought.findOneAndUpdate(
@@ -134,6 +157,8 @@ const resolvers = {
     //   throw AuthenticationError;
     // },
     removeHabit: async (_parent: any, { habitId }: HabitArgs, context: any) => {
+      console.log("Context User:", context.user);
+      console.log("Habit ID:", habitId);    
       if (context.user) {
         const habit = await Habit.findOneAndDelete({
           _id: habitId,
@@ -151,8 +176,73 @@ const resolvers = {
 
         return habit;
       }
-      throw AuthenticationError;
+      //throw AuthenticationError;
+      console.log("User not authenticated.");
+      throw new AuthenticationError("You need to be logged in!");
     },
+
+    editHabit: async (_parent: any, { habitId, input }: EditHabitArgs, context: any) => {
+      if (context.user) {
+        console.log("Editing habit with ID:", habitId);
+        console.log("Input data:", input);
+        const updatedHabit = await Habit.findOneAndUpdate(
+          { _id: habitId},
+          { ...input },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+        console.log("Updated habit:", updatedHabit);
+        if (!updatedHabit) {
+          throw new AuthenticationError('Could not authenticate user.');
+        }
+        return updatedHabit;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    
+    // updateHabit: async (_parent: any, { habitId, input }: any, context: any) => {
+    //   if (!context.user) {
+    //     throw new AuthenticationError("You need to be logged in!");
+    //   }
+    
+    //   const {
+    //     habitText,
+    //     targetGoal,
+    //     targetGoalUnit,
+    //     actualPerformance,
+    //     actualPerformanceUnit, // required now
+    //     habitDate,
+    //   } = input;
+    
+    //   const existingHabit = await Habit.findById(habitId);
+    //   if (!existingHabit) {
+    //     throw new Error("Habit not found");
+    //   }
+    
+    //   const updatedTarget = targetGoal ?? existingHabit.targetGoal;
+    //   const updatedActual = actualPerformance ?? existingHabit.actualPerformance ?? 0;
+    
+    //   const progress =
+    //     updatedTarget && updatedTarget > 0
+    //       ? Math.min(100, Math.round((updatedActual / updatedTarget) * 100))
+    //       : 0;
+    
+    //       const updatedFields = {
+    //         ...input,
+    //         progress,
+    //       };
+          
+    //       const updatedHabit = await Habit.findByIdAndUpdate(
+    //         habitId,
+    //         updatedFields,
+    //         { new: true }
+    //       );
+    
+    //   return updatedHabit;
+    // }
+    
     // removeComment: async (_parent: any, { thoughtId, commentId }: RemoveCommentArgs, context: any) => {
     //   if (context.user) {
     //     return Thought.findOneAndUpdate(
